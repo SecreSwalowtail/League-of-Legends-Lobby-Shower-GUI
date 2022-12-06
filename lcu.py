@@ -67,14 +67,7 @@ class LCU:
         self.riot_link = 'https://127.0.0.1:' + self.riot_client_port
 
     def get_players_data(self):
-        # We need 2 headers for this : lcu is for normal stuff , riot is for stuff that you need a dev token
-        # We replace the dev tokens with encoded client/riot token
-        headers_lcu = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Basic ' + self.auth_token
-        }
-
+        # LCU requires this specific header to be sent
         headers_riot = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -108,29 +101,29 @@ class LCU:
         return opgg
 
     def get_ugg_link(self):
-        formated_region = ''
+        formatted_region = ''
         # Translate region to u.gg regions
         if self.region == 'eune':
-            formated_region = 'eun1'
+            formatted_region = 'eun1'
         elif self.region == 'euw':
-            formated_region = 'euw1'
+            formatted_region = 'euw1'
         elif self.region == 'na':
-            formated_region = 'na1'
+            formatted_region = 'na1'
         elif self.region == 'br':
-            formated_region = 'br1'
+            formatted_region = 'br1'
         elif self.region == 'jp':
-            formated_region = 'jp1'
+            formatted_region = 'jp1'
         elif self.region == 'kr':
-            formated_region = 'kr'
+            formatted_region = 'kr'
 
         temp_link = 'https://u.gg/multisearch?summoners='
         # Spaces to %20
-        first_pass_formated_names = [w.replace(' ', '%20') for w in self.player_names]
+        first_pass_formatted_names = [w.replace(' ', '%20') for w in self.player_names]
         # Joining strings with separator ','
-        second_pass_formated_names = ','.join(first_pass_formated_names)
+        second_pass_formatted_names = ','.join(first_pass_formatted_names)
 
         # Combining everything in one link
-        temp_link2 = temp_link + second_pass_formated_names + '&region=' + formated_region
+        temp_link2 = temp_link + second_pass_formatted_names + '&region=' + formatted_region
 
         return temp_link2
 

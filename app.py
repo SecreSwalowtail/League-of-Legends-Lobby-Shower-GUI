@@ -1,6 +1,5 @@
 import flet
 from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, \
-    Banner, Padding, padding
 from lcu import LCU
 import webbrowser
 
