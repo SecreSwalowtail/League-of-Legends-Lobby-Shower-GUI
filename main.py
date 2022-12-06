@@ -13,8 +13,6 @@ def main(page: Page):
     # Check if client is open and throw error
     err1 = flet.AlertDialog(
         title=flet.Text('League Client not found. Make sure to run the client first.', text_align='center'))
-    # If names array empty , show this banner
-
 
     if lcu.LCU.check_client_running('LeagueClientUx.exe') == False:
         page.dialog = err1
