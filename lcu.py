@@ -150,4 +150,10 @@ class LCU:
         # Reset the player list every time button is clicked
         self.player_names.clear()
 
+    def get_opgg_profile(self, n):
+        # For each player , open the OP.GG profile in a new tab
+        opgg_link = 'https://www.op.gg/summoners/' + self.region + '/' + self.player_names[n]
+        return opgg_link
+
     # TODO: Error checking for 401,403,404
+

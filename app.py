@@ -1,17 +1,31 @@
-from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, AlertDialog, Text
+import flet
+from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, \
+    Banner, Padding, padding
 from lcu import LCU
 import webbrowser
 
 
 class App(UserControl):
+    def __init__(self):
+        super().__init__()
+        self.player_list_state = bool
+
     def build(self):
         # Button list of players
-        self.p1 = TextButton(text='N/A', data='p1')
-        self.p2 = TextButton(text='N/A', data='p2')
-        self.p3 = TextButton(text='N/A', data='p3')
-        self.p4 = TextButton(text='N/A', data='p4')
-        self.p5 = TextButton(text='N/A', data='p5')
-        # TODO: Player buttons should open OP.GG Profile
+        self.p1 = TextButton(text='N/A', data='p1', on_click=self.button_clicked)
+        self.p2 = TextButton(text='N/A', data='p2', on_click=self.button_clicked)
+        self.p3 = TextButton(text='N/A', data='p3', on_click=self.button_clicked)
+        self.p4 = TextButton(text='N/A', data='p4', on_click=self.button_clicked)
+        self.p5 = TextButton(text='N/A', data='p5', on_click=self.button_clicked)
+        # Bottom Sheet for list index error
+        self.bs = flet.BottomSheet(
+            Column(
+                [
+                    flet.Text('Cannot find name . Are you in champion select ?', size=16),
+                ],
+                tight=True,
+            ),
+        )
 
         # Instantiating the LCU class
         self.instance = LCU('LeagueClientUx.exe')
@@ -136,7 +150,50 @@ class App(UserControl):
             webbrowser.open(url=url, new=0, autoraise=True)
 
         elif data == 'p1':
-            print(self.p1.text)
+            try:
+                url = self.instance.get_opgg_profile(0)
+                webbrowser.open(url=url, new=0, autoraise=True)
+            except IndexError:
+                self.bs.open = True
+                self.page.overlay.append(self.bs)
+                self.page.update()
+        elif data == 'p2':
+            try:
+                url = self.instance.get_opgg_profile(1)
+                webbrowser.open(url=url, new=0, autoraise=True)
+            except IndexError:
+                self.bs.open = True
+                self.page.overlay.append(self.bs)
+                self.page.update()
+        elif data == 'p3':
+            try:
+                url = self.instance.get_opgg_profile(2)
+                webbrowser.open(url=url, new=0, autoraise=True)
+            except IndexError:
+                self.bs.open = True
+                self.page.overlay.append(self.bs)
+                self.page.update()
+        elif data == 'p4':
+            try:
+                url = self.instance.get_opgg_profile(3)
+                webbrowser.open(url=url, new=0, autoraise=True)
+            except IndexError:
+                self.bs.open = True
+                self.page.overlay.append(self.bs)
+                self.page.update()
+        elif data == 'p5':
+            try:
+                url = self.instance.get_opgg_profile(4)
+                webbrowser.open(url=url, new=0, autoraise=True)
+            except IndexError:
+                self.bs.open = True
+                self.page.overlay.append(self.bs)
+                self.page.update()
+
+        elif data == 'listerr':
+            self.bs.open = False
+            self.bs.update()
+
 
         self.update()
 
