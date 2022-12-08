@@ -83,7 +83,7 @@ class LCU:
             # Check if the same name is appending twice
             if names['name'] not in self.player_names:
                 self.player_names.append(names['name'])
-                print(names)
+                #print(names)
 
         return self.player_names
 
