@@ -9,6 +9,9 @@ def main(page: Page):
     page.title = 'League of Legends - Lobby Shower'
     page.window_height = 800
     page.window_width = 400
+    page.window_resizable = False
+    page.window_minimizable = True
+    page.window_maximizable = False
 
     # Check if client is open and throw error
     err1 = flet.AlertDialog(

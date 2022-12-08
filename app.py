@@ -1,5 +1,5 @@
 import flet
-from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, \
+from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, IconButton, Page
 from lcu import LCU
 import webbrowser
 
@@ -126,8 +126,6 @@ class App(UserControl):
         )
 
     def button_clicked(self, e):
-
-
         data = e.control.data
         if data == 'Get Names':
             # Reset the array
@@ -195,4 +193,7 @@ class App(UserControl):
 
 
         self.update()
+
+
+
 

@@ -3,7 +3,6 @@ import psutil
 import requests
 import json
 
-
 class LCU:
     lockfile_location = None
     port_number = None
