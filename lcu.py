@@ -79,11 +79,8 @@ class LCU:
         r = requests.get(api_champ_select, verify=False, headers=headers_riot)
         data = json.loads(r.text)
         # Parsing the names
-        for names in data['participants']:
-            # Check if the same name is appending twice
-            if names['name'] not in self.player_names:
-                self.player_names.append(names['name'])
-                #print(names)
+        participant_names = { pax['name'] for pax in data['participants'] }
+        self.player_names = list(participant_names.update(self.player_names))
 
         return self.player_names
 
