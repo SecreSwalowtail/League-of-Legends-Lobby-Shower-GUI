@@ -79,8 +79,8 @@ class LCU:
         r = requests.get(api_champ_select, verify=False, headers=headers_riot)
         data = json.loads(r.text)
         # Parsing the names
-        participant_names = { pax['name'] for pax in data['participants'] }
-        self.player_names = list(participant_names.update(self.player_names))
+        participant_names = [ pax['name'] for pax in data['participants'] ]        
+        self.player_names = list(set(participant_names + self.player_names))
 
         return self.player_names
 
