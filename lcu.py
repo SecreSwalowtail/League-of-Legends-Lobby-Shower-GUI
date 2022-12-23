@@ -2,6 +2,8 @@ import base64
 import psutil
 import requests
 import json
+from urllib.parse import urlencode
+
 
 class LCU:
     lockfile_location = None
@@ -79,52 +81,36 @@ class LCU:
         r = requests.get(api_champ_select, verify=False, headers=headers_riot)
         data = json.loads(r.text)
         # Parsing the names
-        for names in data['participants']:
-            # Check if the same name is appending twice
-            if names['name'] not in self.player_names:
-                self.player_names.append(names['name'])
-                #print(names)
+        participant_names = {pax['name'] for pax in data['participants']}
+        self.player_names = list(participant_names)
 
         return self.player_names
 
     def get_opgg_link(self):
 
-        # OPGG link with region included
-        temp_link = 'https://www.op.gg/multisearch/' + self.region + '?summoners='
-        # Spaces to %20
-        first_pass_formated_names = [w.replace(' ', '%20') for w in self.player_names]
-        # Joining strings with separator %2C
-        second_pass_formated_names = '%2C'.join(first_pass_formated_names)
+        base_url = f'https://www.op.gg/multisearch/{self.region}?'
+        params = {'summoners': ','.join(self.player_names)}
 
-        opgg = temp_link + second_pass_formated_names
-        return opgg
+        return base_url + urlencode(params)
 
     def get_ugg_link(self):
-        formatted_region = ''
-        # Translate region to u.gg regions
-        if self.region == 'eune':
-            formatted_region = 'eun1'
-        elif self.region == 'euw':
-            formatted_region = 'euw1'
-        elif self.region == 'na':
-            formatted_region = 'na1'
-        elif self.region == 'br':
-            formatted_region = 'br1'
-        elif self.region == 'jp':
-            formatted_region = 'jp1'
-        elif self.region == 'kr':
-            formatted_region = 'kr'
 
-        temp_link = 'https://u.gg/multisearch?summoners='
-        # Spaces to %20
-        first_pass_formatted_names = [w.replace(' ', '%20') for w in self.player_names]
-        # Joining strings with separator ','
-        second_pass_formatted_names = ','.join(first_pass_formatted_names)
+        formatted_regions = {
+            'eune': 'eun1',
+            'euw': 'euw1',
+            'na': 'na1',
+            'br': 'br1',
+            'jp': 'jp1',
+            'kr': 'kr'
+        }
 
-        # Combining everything in one link
-        temp_link2 = temp_link + second_pass_formatted_names + '&region=' + formatted_region
+        base_url = 'https://u.gg/multisearch?'
+        params = {
+            'summoners': ','.join(self.player_names),
+            'region': formatted_regions.get(self.region, '')
+        }
 
-        return temp_link2
+        return base_url + urlencode(params, safe=',')
 
     @staticmethod
     def check_client_running(processname):
