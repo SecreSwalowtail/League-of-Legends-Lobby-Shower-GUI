@@ -1,8 +1,9 @@
 import time
 import flet
-from flet import Page, Banner, colors
+from flet import Page, Banner, colors, TextAlign
 from app import App
 import lcu
+from lcu import LCU
 
 
 def main(page: Page):
@@ -13,20 +14,25 @@ def main(page: Page):
     page.window_minimizable = True
     page.window_maximizable = False
 
+    client_detected = False # Constant to track the client state
+
     # Check if client is open and throw error
     err1 = flet.AlertDialog(
-        title=flet.Text('League Client not found. Make sure to run the client first.', text_align='center'))
+        title=flet.Text('League Client not found.\n Retrying...', text_align=TextAlign.CENTER))
 
-    if lcu.LCU.check_client_running('LeagueClientUx.exe') == False:
-        page.dialog = err1
-        err1.open = True
-        page.update()
-        time.sleep(2)
-        page.window_close()
-    else:
-        pass
+    while not client_detected:
+        if lcu.LCU.check_client_running('LeagueClientUx.exe'):
+            client_detected = True
+        else:
+            page.dialog = err1
+            err1.open = True
+            page.update()
 
-    # TODO: Notifications when not in champion select
+        time.sleep(1)
+
+    # Close the banner when the process is found
+    err1.open = False
+    page.update()
 
     # Main Window Elements
     app = App()

@@ -1,5 +1,6 @@
 import flet
-from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, IconButton, Page
+from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, \
+    IconButton, Page, MainAxisAlignment, CrossAxisAlignment
 from lcu import LCU
 import webbrowser
 
@@ -7,6 +8,13 @@ import webbrowser
 class App(UserControl):
     def __init__(self):
         super().__init__()
+        self.p1 = None
+        self.p2 = None
+        self.p3 = None
+        self.p4 = None
+        self.p5 = None
+        self.bs = None
+        self.instance = None
         self.player_list_state = bool
 
     def build(self):
@@ -65,7 +73,7 @@ class App(UserControl):
                                 height=200,
 
                                 content=Row(
-                                    alignment='center',
+                                    alignment=MainAxisAlignment.CENTER,
                                     spacing=20,
 
                                     controls=[
@@ -102,7 +110,7 @@ class App(UserControl):
                                 width=400,
                                 height=500,
                                 content=Column(
-                                    horizontal_alignment='center',
+                                    horizontal_alignment=CrossAxisAlignment.CENTER,
                                     spacing=50,
 
                                     controls=[
@@ -191,9 +199,4 @@ class App(UserControl):
             self.bs.open = False
             self.bs.update()
 
-
         self.update()
-
-
-
-
