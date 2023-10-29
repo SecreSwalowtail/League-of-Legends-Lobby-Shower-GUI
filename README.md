@@ -8,7 +8,6 @@ Using /v5-chat API you can get the names from everyone
 | __No dev-token needed!__
 
 You can also multi-search OP.GG and U.GG from within app
-
 # Getting Started
 
 1. Download the release here : https://github.com/SecreSwalowtail/League-of-Legends-Lobby-Shower-GUI/releases
@@ -21,4 +20,8 @@ NOTE: Gets only the names from your team , not enemy team!
 # Contact
 Troubleshooting:
 
-Discord : Secre#4779
+Discord : secre11
+
+# DISCONTINUED
+Still works but i'm working a new project that includes this script functionality + many many addional features
+https://github.com/SecreSwalowtail/RankWatch
