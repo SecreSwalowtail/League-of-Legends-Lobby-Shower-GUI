@@ -16,12 +16,12 @@ You can also multi-search OP.GG and U.GG from within app
 4. Press Get Names
 
 NOTE: Gets only the names from your team , not enemy team!
+If the 1.2 release does not work for you try the 1.1
 
 # Contact
 Troubleshooting:
-
 Discord : secre11
 
 # DISCONTINUED
-Still works but i'm working a new project that includes this script functionality + many many addional features
 https://github.com/SecreSwalowtail/RankWatch
+This one still works but does not support multiple clients.
