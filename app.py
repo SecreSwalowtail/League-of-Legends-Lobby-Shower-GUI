@@ -1,6 +1,6 @@
 import flet
 from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, \
-    IconButton, Page, MainAxisAlignment, CrossAxisAlignment
+    IconButton, Page, MainAxisAlignment, CrossAxisAlignment, OutlinedButton
 from lcu import LCU
 import webbrowser
 
@@ -8,6 +8,7 @@ import webbrowser
 class App(UserControl):
     def __init__(self):
         super().__init__()
+        self.client_instances_row = None
         self.p1 = None
         self.p2 = None
         self.p3 = None
@@ -16,6 +17,8 @@ class App(UserControl):
         self.bs = None
         self.instance = None
         self.player_list_state = bool
+        self.client_instances = None
+        self.selected_instance = None
 
     def build(self):
         # Button list of players
@@ -36,8 +39,27 @@ class App(UserControl):
 
         # Instantiating the LCU class
         self.instance = LCU('LeagueClientUx.exe')
-        # Getting client info
-        self.instance.get_client_data()
+
+
+        self.client_instances_row = Row(
+            alignment=MainAxisAlignment.CENTER,
+            controls=[
+
+            ]
+        )
+
+        self.client_instances = self.instance.client_instances
+        for player_name, data in self.client_instances.items():
+            client_button = ElevatedButton(
+                text=player_name,
+                bgcolor=colors.BLUE_GREY_100,
+                color=colors.BLACK,
+                data=data,
+                width=100,
+                height=25,
+                on_click=self.select_instance
+            )
+            self.client_instances_row.controls.append(client_button)
 
         # Main Nav View
         return Column(
@@ -72,36 +94,42 @@ class App(UserControl):
                                 width=400,
                                 height=200,
 
-                                content=Row(
+                                content=Column(
                                     alignment=MainAxisAlignment.CENTER,
                                     spacing=20,
 
                                     controls=[
-                                        # OP.GG Button
-                                        ElevatedButton(
-                                            text='OP.GG',
-                                            bgcolor=colors.BLUE_GREY_100,
-                                            color=colors.BLACK,
-                                            on_click=self.button_clicked,
-                                            data='OP.GG',
+                                        Row(
+                                            alignment=MainAxisAlignment.CENTER,
+                                            controls=[
+                                                # OP.GG Button
+                                                ElevatedButton(
+                                                    text='OP.GG',
+                                                    bgcolor=colors.BLUE_GREY_100,
+                                                    color=colors.BLACK,
+                                                    on_click=self.button_clicked,
+                                                    data='OP.GG',
 
+                                                ),
+                                                # Get Names Button
+                                                ElevatedButton(
+                                                    text='Get Names',
+                                                    bgcolor=colors.BLUE_GREY_100,
+                                                    color=colors.BLACK,
+                                                    on_click=self.button_clicked,
+                                                    data='Get Names',
+                                                ),
+                                                ElevatedButton(
+                                                    text='U.GG',
+                                                    bgcolor=colors.BLUE_GREY_100,
+                                                    color=colors.BLACK,
+                                                    on_click=self.button_clicked,
+                                                    data='U.GG'
+                                                )
+                                            ]
                                         ),
-                                        # Get Names Button
-                                        ElevatedButton(
-
-                                            text='Get Names',
-                                            bgcolor=colors.BLUE_GREY_100,
-                                            color=colors.BLACK,
-                                            on_click=self.button_clicked,
-                                            data='Get Names',
-                                        ),
-                                        ElevatedButton(
-                                            text='U.GG',
-                                            bgcolor=colors.BLUE_GREY_100,
-                                            color=colors.BLACK,
-                                            on_click=self.button_clicked,
-                                            data='U.GG'
-                                        )
+                                        # Row for client instances
+                                        self.client_instances_row
                                     ]
                                 )
                             ),
@@ -133,14 +161,23 @@ class App(UserControl):
             ]
         )
 
+    def select_instance(self, e):
+        data = e.control.data
+        self.selected_instance = data
+        print(self.selected_instance)
+        for button in self.client_instances_row.controls:
+            if button.data == data:
+                button.bgcolor = colors.YELLOW_200
+            else:
+                button.bgcolor = colors.BLUE_GREY_100
+
+        self.client_instances_row.update()
+
     def button_clicked(self, e):
         data = e.control.data
         if data == 'Get Names':
-            # Reset the array
-            self.instance.reset_player_list()
-
             # Get names of people
-            players_names = self.instance.get_players_data()
+            players_names = self.instance.get_players_data(self.selected_instance['riot_client_auth_token'], self.selected_instance['riot_client_port'])
 
             self.p1.text = players_names[0]
             self.p2.text = players_names[1]
@@ -194,7 +231,6 @@ class App(UserControl):
                 self.bs.open = True
                 self.page.overlay.append(self.bs)
                 self.page.update()
-
         elif data == 'listerr':
             self.bs.open = False
             self.bs.update()
