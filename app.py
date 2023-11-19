@@ -1,6 +1,6 @@
 import flet
 from flet import UserControl, Column, Container, Row, RadialGradient, Alignment, ElevatedButton, colors, TextButton, \
-    IconButton, Page, MainAxisAlignment, CrossAxisAlignment, OutlinedButton
+    MainAxisAlignment, CrossAxisAlignment
 from lcu import LCU
 import webbrowser
 
@@ -8,6 +8,7 @@ import webbrowser
 class App(UserControl):
     def __init__(self):
         super().__init__()
+        self.players_names = []
         self.client_instances_row = None
         self.p1 = None
         self.p2 = None
@@ -39,7 +40,6 @@ class App(UserControl):
 
         # Instantiating the LCU class
         self.instance = LCU('LeagueClientUx.exe')
-
 
         self.client_instances_row = Row(
             alignment=MainAxisAlignment.CENTER,
@@ -164,7 +164,8 @@ class App(UserControl):
     def select_instance(self, e):
         data = e.control.data
         self.selected_instance = data
-        print(self.selected_instance)
+        self.players_names.clear()
+        #print(self.selected_instance)
         for button in self.client_instances_row.controls:
             if button.data == data:
                 button.bgcolor = colors.YELLOW_200
@@ -177,23 +178,25 @@ class App(UserControl):
         data = e.control.data
         if data == 'Get Names':
             # Get names of people
-            players_names = self.instance.get_players_data(self.selected_instance['riot_client_auth_token'], self.selected_instance['riot_client_port'])
+            self.players_names.clear()
+            self.players_names = self.instance.get_players_data(self.selected_instance['riot_client_auth_token'],
+                                                           self.selected_instance['riot_client_port'])
 
-            self.p1.text = players_names[0]
-            self.p2.text = players_names[1]
-            self.p3.text = players_names[2]
-            self.p4.text = players_names[3]
-            self.p5.text = players_names[4]
+            self.p1.text = self.players_names[0]
+            self.p2.text = self.players_names[1]
+            self.p3.text = self.players_names[2]
+            self.p4.text = self.players_names[3]
+            self.p5.text = self.players_names[4]
         elif data == 'OP.GG':
-            url = self.instance.get_opgg_link()
+            url = self.instance.get_opgg_link(data['region'], self.players_names)
             webbrowser.open(url=url, new=0, autoraise=True)
         elif data == 'U.GG':
-            url = self.instance.get_ugg_link()
+            url = self.instance.get_ugg_link(data['region'], self.players_names)
             webbrowser.open(url=url, new=0, autoraise=True)
 
         elif data == 'p1':
             try:
-                url = self.instance.get_opgg_profile(0)
+                url = self.instance.get_opgg_profile(data['region'], self.players_names[0])
                 webbrowser.open(url=url, new=0, autoraise=True)
             except IndexError:
                 self.bs.open = True
@@ -201,7 +204,7 @@ class App(UserControl):
                 self.page.update()
         elif data == 'p2':
             try:
-                url = self.instance.get_opgg_profile(1)
+                url = self.instance.get_opgg_profile(data['region'], self.players_names[1])
                 webbrowser.open(url=url, new=0, autoraise=True)
             except IndexError:
                 self.bs.open = True
@@ -209,7 +212,7 @@ class App(UserControl):
                 self.page.update()
         elif data == 'p3':
             try:
-                url = self.instance.get_opgg_profile(2)
+                url = self.instance.get_opgg_profile(data['region'], self.players_names[2])
                 webbrowser.open(url=url, new=0, autoraise=True)
             except IndexError:
                 self.bs.open = True
@@ -217,7 +220,7 @@ class App(UserControl):
                 self.page.update()
         elif data == 'p4':
             try:
-                url = self.instance.get_opgg_profile(3)
+                url = self.instance.get_opgg_profile(data['region'], self.players_names[3])
                 webbrowser.open(url=url, new=0, autoraise=True)
             except IndexError:
                 self.bs.open = True
@@ -225,7 +228,7 @@ class App(UserControl):
                 self.page.update()
         elif data == 'p5':
             try:
-                url = self.instance.get_opgg_profile(4)
+                url = self.instance.get_opgg_profile(data['region'], self.players_names[4])
                 webbrowser.open(url=url, new=0, autoraise=True)
             except IndexError:
                 self.bs.open = True

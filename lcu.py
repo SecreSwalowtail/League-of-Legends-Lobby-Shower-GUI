@@ -1,9 +1,9 @@
-import base64
 import psutil
 import requests
 import json
 from urllib.parse import urlencode
 from utils import scan_client_instances
+
 
 class LCU:
     def __init__(self, name):
@@ -29,14 +29,16 @@ class LCU:
 
         return player_names
 
-    def get_opgg_link(self):
+    @staticmethod
+    def get_opgg_link(region, player_names):
 
-        base_url = f'https://www.op.gg/multisearch/{self.region}?'
-        params = {'summoners': ','.join(self.player_names)}
+        base_url = f'https://www.op.gg/multisearch/{region}?'
+        params = {'summoners': ','.join(player_names)}
 
         return base_url + urlencode(params)
 
-    def get_ugg_link(self):
+    @staticmethod
+    def get_ugg_link(region, player_names):
 
         formatted_regions = {
             'eune': 'eun1',
@@ -49,8 +51,8 @@ class LCU:
 
         base_url = 'https://u.gg/multisearch?'
         params = {
-            'summoners': ','.join(self.player_names),
-            'region': formatted_regions.get(self.region, '')
+            'summoners': ','.join(player_names),
+            'region': formatted_regions.get(region, '')
         }
 
         return base_url + urlencode(params, safe=',')
@@ -67,14 +69,10 @@ class LCU:
 
         return False
 
-    def reset_player_list(self):
-        # Reset the player list every time button is clicked
-        self.player_names.clear()
-
-    def get_opgg_profile(self, n):
+    @staticmethod
+    def get_opgg_profile(region, player_name):
         # For each player , open the OP.GG profile in a new tab
-        opgg_link = 'https://www.op.gg/summoners/' + self.region + '/' + self.player_names[n]
+        opgg_link = 'https://www.op.gg/summoners/' + region + '/' + player_name
         return opgg_link
 
     # TODO: Error checking for 401,403,404
-

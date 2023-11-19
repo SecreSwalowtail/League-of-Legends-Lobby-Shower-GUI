@@ -14,7 +14,7 @@ def main(page: Page):
     page.window_minimizable = True
     page.window_maximizable = False
 
-    client_detected = False # Constant to track the client state
+    client_detected = False  # Constant to track the client state
 
     # Check if client is open and throw error
     err1 = flet.AlertDialog(
