@@ -39,7 +39,7 @@ def get_instance_player_name(port, token):
     url = f"https://127.0.0.1:{port}/lol-summoner/v1/current-summoner"
     r = requests.get(url, verify=False, headers=headers_riot)
     data = json.loads(r.text)
-    return data.get('displayName', None)
+    return data.get('gameName', None)
 
 
 def scan_client_instances(name):

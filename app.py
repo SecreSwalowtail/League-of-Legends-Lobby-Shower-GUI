@@ -55,7 +55,7 @@ class App(UserControl):
                 bgcolor=colors.BLUE_GREY_100,
                 color=colors.BLACK,
                 data=data,
-                width=100,
+                width='auto',
                 height=25,
                 on_click=self.select_instance
             )
